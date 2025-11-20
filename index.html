@@ -144,7 +144,7 @@
     cursor: pointer;
   }
 
-  /* Responsive improvements */
+  /* Responsive  */
   @media (max-width: 768px) {
     .container {
       flex-direction: column;
@@ -251,7 +251,7 @@
   const savingsText = document.getElementById('savings');
   const rangeLabelsContainer = document.getElementById('rangeLabels');
 
-  // Build milestones array with exact 1,000,000 included
+ 
   const milestones = [];
 
   for(let v=100000; v <= 500000; v += 5000) milestones.push(v);
@@ -266,10 +266,10 @@
     return num.toLocaleString("en-US");
   }
 
-  // Milestone labels to show below the slider with full comma format
+  
   const labelValues = [100000, 250000, 500000, 1000000, 5000000];
 
-  // Add labels positioned accurately on slider track
+ 
   rangeLabelsContainer.innerHTML = ''; // clear old
 
   labelValues.forEach(value => {

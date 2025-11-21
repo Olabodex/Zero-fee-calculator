@@ -7,6 +7,45 @@
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
+  /* MOBILE OPTIMIZATION FIX */
+@media (max-width: 640px) {
+  /* Increase vertical spacing below slider */
+  #rangeLabels {
+    margin-top: 18px !important;
+    height: 22px !important;
+  }
+
+  /* Make labels smaller & spaced */
+  #rangeLabels span {
+    font-size: 10px !important;
+    bottom: -2px;
+    white-space: nowrap;
+  }
+
+  /* Add breathing room above dots */
+  #sliderDots {
+    top: 60% !important;
+  }
+
+  /* Increase padding around slider */
+  input[type="range"] {
+    margin-top: 22px !important;
+  }
+
+  /* Reduce dot spacing problem */
+  .slider-dot {
+    width: 8px !important;
+    height: 8px !important;
+    top: 55% !important;
+  }
+
+  /* Reduce thumb size so it doesn't cover labels */
+  input[type="range"]::-webkit-slider-thumb {
+    width: 28px !important;
+    height: 28px !important;
+  }
+}
+
   /* ==========================
      Modern Premium Slider
      ========================== */

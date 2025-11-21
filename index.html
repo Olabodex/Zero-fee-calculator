@@ -4,305 +4,226 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Zero Fee Processing Calculator</title>
+<script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-  body {
-    font-family: 'Inter', sans-serif;
-    background: #f5f7fb;
-    color: #1d1d44;
-    margin: 0; padding: 0;
-  }
-
-  .container {
-    max-width: 1300px;
-    margin: 60px auto;
-    display: flex;
-    gap: 40px;
-    padding: 0 40px;
-    align-items: flex-start;
-  }
-
-  .left-section {
-    flex: 1;
-    padding-right: 40px;
-  }
-
-  h1 {
-    font-size: 56px;
-    margin-bottom: 20px;
-  }
-
-  .subtitle {
-    font-size: 20px;
-    color: #5a5a7a;
-    margin-bottom: 35px;
-  }
-
-  .label {
-    font-weight: 700;
-    font-size: 26px;
-    margin-bottom: 12px;
-  }
-
-  .value-display {
-    font-size: 40px;
-    font-weight: 700;
-    color: #3ecf8e;
-    margin-bottom: 25px;
-  }
-
+  /* ==========================
+     Modern Premium Slider
+     ========================== */
   input[type="range"] {
-    width: 100%;
-    height: 12px;
-    border-radius: 5px;
-    background: #d3d3d3;
-    outline: none;
     -webkit-appearance: none;
-    position: relative;
-    z-index: 2;
+    appearance: none;
+    width: 100%;
+    height: 10px;
+    border-radius: 999px;
+    background: linear-gradient(to right, #10b981 0%, #10b981 0%, #e5e7eb 0%);
+    outline: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
   }
 
+  /* Track Height Consistency */
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 10px;
+    border-radius: 999px;
+  }
+
+  /* Thumb */
   input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
+    appearance: none;
     width: 34px;
     height: 34px;
-    background: #28a745;
     border-radius: 50%;
+    background: white;
+    border: 4px solid #10b981;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.45);
     cursor: pointer;
-    border: none;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    position: relative;
-    z-index: 3;
+    transition: transform 0.15s ease, box-shadow 0.3s ease;
   }
 
-  .range-labels {
-    position: relative;
-    width: 100%;
-    height: 20px;
-    margin-top: 12px;
+  input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.55);
   }
 
-  .range-labels span {
+  input[type="range"]::-moz-range-thumb {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: white;
+    border: 4px solid #10b981;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.45);
+    cursor: pointer;
+  }
+
+  /* Slider milestone dots */
+  .slider-dot {
     position: absolute;
-    top: 0;
-    transform: translateX(-50%);
-    font-size: 14px;
-    color: #777;
-    white-space: nowrap;
+    width: 10px;
+    height: 10px;
+    background: #d1d5db;
+    border-radius: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
 
-  .note {
-    margin-top: 25px;
-    font-size: 14px;
-    color: #777;
-  }
-
-  .card {
-    flex: 0 0 450px;
-    background: linear-gradient(180deg, #28a745, #1e7e34);
-    border-radius: 35px;
-    padding: 50px 40px;
-    color: white;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-  }
-
-  .card h2 {
-    font-size: 70px;
-    margin: 0;
-    display: inline-block;
-    line-height: 1;
-  }
-
-  .card small {
-    font-size: 22px;
-    margin-left: 12px;
-    vertical-align: bottom;
-    white-space: nowrap;
-  }
-
-  .desc {
-    margin-top: 25px;
-    font-weight: 600;
-    font-size: 22px;
-  }
-
-  .subtext {
-    margin-top: 18px;
-    font-size: 18px;
-    line-height: 1.5;
-  }
-
-  .button {
-    margin-top: 40px;
-    background: #28a745;
-    padding: 18px 40px;
-    font-weight: 700;
-    font-size: 20px;
-    border-radius: 35px;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-
-  /* Responsive  */
-  @media (max-width: 768px) {
-    .container {
-      flex-direction: column;
-      padding: 20px;
-      gap: 40px;
-    }
-
-    .value-display {
-      font-size: 28px;
-      margin-bottom: 30px;
-    }
-
-    .range-labels span {
-      font-size: 12px;
-      white-space: nowrap;
-      padding: 0 6px;
-      box-sizing: content-box;
-    }
-
-    /* Extra spacing between $100,000 and $250,000 */
-    .range-labels span:nth-child(1) {
-      transform: translateX(-70%);
-    }
-
-    .range-labels span:nth-child(2) {
-      transform: translateX(-30%);
-    }
-
-    .range-labels span:nth-child(3) {
-      transform: translateX(-40%);
-    }
-
-    .range-labels span:nth-child(4) {
-      transform: translateX(-35%);
-    }
-
-    .card {
-      width: 100%;
-      max-width: 450px;
-      padding: 40px 30px;
-      margin: 0 auto;
-      box-sizing: border-box;
-      border-radius: 25px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    }
-
-    .card h2 {
-      font-size: 50px;
-    }
-
-    .card small {
-      font-size: 18px;
-      margin-left: 8px;
-    }
-
-    .desc {
-      font-size: 18px;
-      margin-top: 20px;
-    }
-
-    .subtext {
-      font-size: 16px;
-      margin-top: 16px;
-    }
-
-    .button {
-      font-size: 18px;
-      padding: 14px 32px;
-      margin-top: 30px;
-    }
+  .slider-dot.active {
+    background: #10b981;
   }
 </style>
 </head>
-<body>
 
-<div class="container">
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen flex items-center justify-center p-4 md:p-8">
 
-  <div class="left-section">
-    <h1>Estimate Your Savings</h1>
-    <p class="subtitle">Use the calculator below to estimate your annual savings.</p>
+<div class="max-w-7xl w-full">
+  <div class="grid md:grid-cols-2 gap-8 items-center">
 
-    <div class="label">Annual Credit Card Processing Volume</div>
-    <div class="value-display" id="volumeText">$250,000</div>
+    <!-- Left Section -->
+    <div class="bg-white rounded-2xl shadow-lg p-10 md:p-14 border border-gray-100">
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4 leading-tight">
+        See how much<br>you can save
+      </h1>
+      <p class="text-gray-600 mb-12">
+        Use the calculator below to determine your potential<br class="hidden md:block">
+        savings on an annual basis
+      </p>
 
-    <input type="range" id="volume" min="0" step="1" />
+      <div class="mb-6">
+        <label class="block text-lg font-semibold text-gray-700 mb-4">
+          Annual Credit Card Processing Volume
+        </label>
+        <div id="volumeText" class="text-5xl font-bold text-emerald-600 mb-10">$250,000</div>
+      </div>
 
-    <div class="range-labels" id="rangeLabels"></div>
+      <div class="relative mb-12">
+        <input type="range" id="volume" class="w-full" min="0" step="1" />
 
-    <div class="note">*Calculation is based on annual credit card processing volume multiplied by 3%.</div>
+        <div id="sliderDots" class="absolute inset-0 pointer-events-none"></div>
+
+        <div id="rangeLabels" class="relative h-8 mt-4"></div>
+      </div>
+
+      <div class="text-gray-500 text-sm">
+        *Calculation is based on annual credit card processing volume multiplied by 3%
+      </div>
+    </div>
+
+    <!-- Right Section -->
+    <div class="bg-gradient-to-br from-emerald-500 via-green-500 to-teal-600 rounded-2xl shadow-2xl p-10 md:p-14 text-white relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-72 h-72 bg-white opacity-10 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 left-0 w-56 h-56 bg-emerald-300 opacity-20 rounded-full blur-3xl"></div>
+
+      <div class="relative z-10">
+        <div class="mb-8">
+          <h2 id="savings" class="text-6xl md:text-7xl font-bold mb-2">$7,500</h2>
+          <span class="text-3xl opacity-90">/yr.</span>
+        </div>
+
+        <div class="mb-8">
+          <div class="text-2xl md:text-3xl font-bold mb-2">Potential Annual Savings</div>
+          <div class="text-2xl md:text-3xl font-bold opacity-95">
+            with Zero Fee Processing
+          </div>
+        </div>
+
+        <p class="text-base md:text-lg opacity-90 mb-10 leading-relaxed">
+          Start saving towards your company success with<br class="hidden md:block">
+          credit card processing fees off your list
+        </p>
+
+        <button class="bg-white text-emerald-600 font-bold py-4 px-10 rounded-lg text-base hover:bg-gray-50 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 uppercase tracking-wider">
+          GET STARTED
+        </button>
+      </div>
+    </div>
+
   </div>
-
-  <div class="card">
-    <h2 id="savings">$7,500</h2><small>/yr.</small>
-    <div class="desc">Annual Savings Estimate<br>With Zero Fee Processing</div>
-    <div class="subtext">Keep more of your money by eliminating processing fees.</div>
-    <button class="button">GET STARTED</button>
-  </div>
-
 </div>
 
 <script>
-  const slider = document.getElementById('volume');
-  const volumeText = document.getElementById('volumeText');
-  const savingsText = document.getElementById('savings');
-  const rangeLabelsContainer = document.getElementById('rangeLabels');
+  const slider = document.getElementById("volume");
+  const volumeText = document.getElementById("volumeText");
+  const savingsText = document.getElementById("savings");
+  const rangeLabelsContainer = document.getElementById("rangeLabels");
+  const sliderDotsContainer = document.getElementById("sliderDots");
 
- 
   const milestones = [];
-
-  for(let v=100000; v <= 500000; v += 5000) milestones.push(v);
-  for(let v=505000; v < 1000000; v += 10000) milestones.push(v);
-  milestones.push(1000000);  // explicitly add 1,000,000
-  for(let v=1050000; v <= 5000000; v += 50000) milestones.push(v);
+  for (let v = 100000; v <= 500000; v += 5000) milestones.push(v);
+  for (let v = 505000; v < 1000000; v += 10000) milestones.push(v);
+  milestones.push(1000000);
+  for (let v = 1050000; v <= 5000000; v += 50000) milestones.push(v);
 
   slider.max = milestones.length - 1;
-  slider.value = milestones.findIndex(v => v === 250000);
+  slider.value = milestones.findIndex((v) => v === 250000);
+
+  const labelValues = [100000, 250000, 500000, 1000000, 5000000];
 
   function formatMoney(num) {
     return num.toLocaleString("en-US");
   }
 
-  
-  const labelValues = [100000, 250000, 500000, 1000000, 5000000];
+  // ====== Labels under slider ======
+  rangeLabelsContainer.innerHTML = "";
+  labelValues.forEach((value) => {
+    const index = milestones.indexOf(value);
+    if (index === -1) return;
 
- 
-  rangeLabelsContainer.innerHTML = ''; // clear old
-
-  labelValues.forEach(value => {
-    const span = document.createElement('span');
-    span.textContent = `$${formatMoney(value)}`; // full number format with commas
-    const index = milestones.findIndex(v => v === value);
-    if (index === -1) return; // skip if value missing (shouldn't)
     const percent = (index / (milestones.length - 1)) * 100;
+
+    const span = document.createElement("span");
+    span.textContent = `$${formatMoney(value)}`;
+    span.className = "absolute text-xs text-gray-500 font-medium transform -translate-x-1/2";
     span.style.left = `${percent}%`;
+
     rangeLabelsContainer.appendChild(span);
+  });
+
+  // ====== Dots on slider ======
+  sliderDotsContainer.innerHTML = "";
+  labelValues.forEach((value) => {
+    const dot = document.createElement("div");
+    dot.className = "slider-dot";
+
+    const index = milestones.indexOf(value);
+    const percent = (index / (milestones.length - 1)) * 100;
+
+    dot.style.left = `${percent}%`;
+
+    sliderDotsContainer.appendChild(dot);
   });
 
   function update() {
     const idx = Number(slider.value);
     const volume = milestones[idx];
+
     volumeText.textContent = "$" + formatMoney(volume);
 
     const savings = Math.round(volume * 0.03);
     savingsText.textContent = "$" + formatMoney(savings);
 
     updateSliderFill(idx);
+    updateActiveDots(idx);
   }
 
   function updateSliderFill(idx) {
     const percent = (idx / (milestones.length - 1)) * 100;
-    slider.style.background = `linear-gradient(to right, #3ecf8e 0%, #28a745 ${percent}%, #d3d3d3 ${percent}%)`;
+    slider.style.background = `linear-gradient(to right, #10b981 0%, #10b981 ${percent}%, #e5e7eb ${percent}%)`;
   }
 
-  slider.addEventListener('input', update);
+  function updateActiveDots(idx) {
+    const dots = sliderDotsContainer.querySelectorAll(".slider-dot");
+    dots.forEach((dot, i) => {
+      const value = labelValues[i];
+      const milestoneIndex = milestones.indexOf(value);
 
-  document.addEventListener("DOMContentLoaded", () => {
-    update();
-  });
+      dot.classList.toggle("active", idx >= milestoneIndex);
+    });
+  }
+
+  slider.addEventListener("input", update);
+
+  document.addEventListener("DOMContentLoaded", update);
 </script>
 
 </body>

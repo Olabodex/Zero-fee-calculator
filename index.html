@@ -133,6 +133,40 @@
     font-weight: 500;
   }
 
+  .milestone-dots {
+    position: relative;
+    width: 100%;
+    height: 20px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+  }
+
+  .milestone-dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: transparent;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid #d3d3d3;
+  }
+
+  .milestone-dot:hover {
+    transform: translateX(-50%) scale(1.2);
+    border-color: #28a745;
+  }
+
+  .milestone-dot:active {
+    transform: translateX(-50%) scale(1);
+  }
+
+  .milestone-dot.active {
+    background: transparent;
+    border-color: #28a745;
+  }
+
   .note {
     margin-top: 32px;
     font-size: 14px;
@@ -216,7 +250,7 @@
     transform: translateY(0);
   }
 
-  /* Responsive improvements */
+  /* Responsive */
   @media (max-width: 992px) {
     .container {
       flex-direction: column;
@@ -283,6 +317,18 @@
       display: none;
     }
 
+    /* Hide $250k dot on mobile  */
+    .milestone-dot:nth-child(2) {
+      display: none;
+    }
+
+    
+    .milestone-dot {
+      width: 14px;
+      height: 14px;
+      border: 2px solid #d3d3d3;
+    }
+
     .card {
       padding: 36px 28px;
       border-radius: 20px;
@@ -338,10 +384,11 @@
     <p class="subtitle">Use the calculator below to estimate your annual savings.</p>
 
     <div class="label">Annual Credit Card Processing Volume</div>
-    <div class="value-display" id="volumeText">$250,000</div>
+    <div class="value-display" id="volumeText">$500,000</div>
 
     <div class="slider-container">
       <input type="range" id="volume" min="0" step="1" />
+      <div class="milestone-dots" id="milestoneDots"></div>
       <div class="range-labels" id="rangeLabels"></div>
     </div>
 
@@ -350,9 +397,9 @@
 
   <div class="card">
     <div class="card-amount">
-      <h2 id="savings">$7,500</h2><small>/yr.</small>
+      <h2 id="savings">$15,000</h2><small>/yr.</small>
     </div>
-    <div class="desc">Annual Savings Estimate<br>With Zero Fee Processing</div>
+    <div class="desc">Annual Savings Estimate<br>With Zero Fee Pro</div>
     <div class="subtext">Keep more of your money by eliminating processing fees.</div>
     <button class="button">Get Started</button>
   </div>
@@ -364,8 +411,9 @@
   const volumeText = document.getElementById('volumeText');
   const savingsText = document.getElementById('savings');
   const rangeLabelsContainer = document.getElementById('rangeLabels');
+  const milestoneDotsContainer = document.getElementById('milestoneDots');
 
-  // Build milestones array
+  // milestones array
   const milestones = [];
   for(let v = 100000; v <= 500000; v += 5000) milestones.push(v);
   for(let v = 505000; v < 1000000; v += 10000) milestones.push(v);
@@ -373,7 +421,7 @@
   for(let v = 1050000; v <= 5000000; v += 50000) milestones.push(v);
 
   slider.max = milestones.length - 1;
-  slider.value = milestones.findIndex(v => v === 250000);
+  slider.value = milestones.findIndex(v => v === 500000);
 
   function formatMoney(num) {
     return num.toLocaleString("en-US");
@@ -391,6 +439,28 @@
   // Milestone labels
   const labelValues = [100000, 250000, 500000, 1000000, 5000000];
 
+  //  milestone dots
+  milestoneDotsContainer.innerHTML = '';
+  labelValues.forEach((value, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'milestone-dot';
+    const index = milestones.findIndex(v => v === value);
+    if (index === -1) return;
+    const percent = (index / (milestones.length - 1)) * 100;
+    dot.style.left = `${percent}%`;
+    dot.dataset.index = index;
+    dot.dataset.value = value;
+   
+    // Click event to jump to milestone
+    dot.addEventListener('click', function() {
+      slider.value = this.dataset.index;
+      update();
+    });
+   
+    milestoneDotsContainer.appendChild(dot);
+  });
+
+  // Create labels
   rangeLabelsContainer.innerHTML = '';
   labelValues.forEach((value, i) => {
     const span = document.createElement('span');
@@ -400,7 +470,7 @@
     const percent = (index / (milestones.length - 1)) * 100;
     span.style.left = `${percent}%`;
    
-    // Perfect positioning for first and last labels
+    
     if (i === 0) {
       span.style.transform = 'translateX(0%)';
     } else if (i === labelValues.length - 1) {
@@ -421,6 +491,7 @@
     savingsText.textContent = "$" + formatMoney(savings);
 
     updateSliderFill(idx);
+    updateActiveDot(volume);
   }
 
   function updateSliderFill(idx) {
@@ -428,9 +499,32 @@
     slider.style.background = `linear-gradient(to right, #28a745 0%, #28a745 ${percent}%, #e9ecef ${percent}%)`;
   }
 
+  function updateActiveDot(currentVolume) {
+    
+    const allDots = milestoneDotsContainer.querySelectorAll('.milestone-dot');
+    allDots.forEach(dot => dot.classList.remove('active'));
+   
+    
+    let closestDot = null;
+    let closestDistance = Infinity;
+   
+    allDots.forEach(dot => {
+      const dotValue = Number(dot.dataset.value);
+      const distance = Math.abs(currentVolume - dotValue);
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestDot = dot;
+      }
+    });
+   
+    if (closestDot) {
+      closestDot.classList.add('active');
+    }
+  }
+
   slider.addEventListener('input', update);
  
-  // Touch event handling for better mobile experience
+  
   slider.addEventListener('touchstart', function() {
     this.classList.add('sliding');
   });
@@ -439,7 +533,7 @@
     this.classList.remove('sliding');
   });
 
-  // Initialize on load
+ 
   update();
 </script>
 

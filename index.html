@@ -278,27 +278,6 @@
       font-size: 11px;
     }
 
-    /* Adjust label positioning for mobile */
-    .range-labels span:nth-child(1) {
-      transform: translateX(-65%);
-    }
-
-    .range-labels span:nth-child(2) {
-      transform: translateX(-45%);
-    }
-
-    .range-labels span:nth-child(3) {
-      transform: translateX(-50%);
-    }
-
-    .range-labels span:nth-child(4) {
-      transform: translateX(-50%);
-    }
-
-    .range-labels span:nth-child(5) {
-      transform: translateX(-35%);
-    }
-
     .card {
       padding: 36px 28px;
       border-radius: 20px;
@@ -395,17 +374,37 @@
     return num.toLocaleString("en-US");
   }
 
+  function formatMoneyShort(num) {
+    if (num >= 1000000) {
+      return `$${(num / 1000000).toFixed(num % 1000000 === 0 ? 0 : 1)}m`;
+    } else if (num >= 1000) {
+      return `$${(num / 1000).toFixed(num % 1000 === 0 ? 0 : 1)}k`;
+    }
+    return `$${num}`;
+  }
+
   // Milestone labels
   const labelValues = [100000, 250000, 500000, 1000000, 5000000];
 
   rangeLabelsContainer.innerHTML = '';
-  labelValues.forEach(value => {
+  labelValues.forEach((value, i) => {
     const span = document.createElement('span');
-    span.textContent = `$${formatMoney(value)}`;
+    span.textContent = formatMoneyShort(value);
     const index = milestones.findIndex(v => v === value);
     if (index === -1) return;
     const percent = (index / (milestones.length - 1)) * 100;
     span.style.left = `${percent}%`;
+   
+    // Perfect positioning for first and last labels
+    if (i === 0) {
+      span.style.transform = 'translateX(0%)';
+    } else if (i === labelValues.length - 1) {
+      span.style.transform = 'translateX(-100%)';
+    } else {
+      span.style.transform = 'translateX(-50%)';
+
+    }
+   
     rangeLabelsContainer.appendChild(span);
   });
 

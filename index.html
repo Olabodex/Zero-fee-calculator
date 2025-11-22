@@ -346,12 +346,12 @@
       display: none;
     }
 
-    /* Hide $250k dot on mobile as well */
+    /* Hide $250k dot on mobile  */
     .milestone-dot:nth-child(2) {
       display: none;
     }
 
-    /* Make dots slightly larger and more tappable on mobile */
+    
     .milestone-dot {
       width: 14px;
       height: 14px;
@@ -484,7 +484,7 @@
       <div class="card-amount">
         <h2 id="savings">$15,000</h2><small>/yr.</small>
       </div>
-      <div class="desc">Annual Savings Estimate<br>With Zero Fee Processing</div>
+      <div class="desc">Annual Savings Estimate<br>With Zero Fee Pro</div>
       <div class="subtext">Keep more of your money by eliminating processing fees.</div>
       <button class="button">Get Started</button>
     </div>
@@ -499,7 +499,7 @@
   const rangeLabelsContainer = document.getElementById('rangeLabels');
   const milestoneDotsContainer = document.getElementById('milestoneDots');
 
-  // Build milestones array
+  //  milestones array
   const milestones = [];
   for(let v = 100000; v <= 500000; v += 5000) milestones.push(v);
   for(let v = 505000; v < 1000000; v += 10000) milestones.push(v);
@@ -525,7 +525,7 @@
   // Milestone labels
   const labelValues = [100000, 250000, 500000, 1000000, 5000000];
 
-  // Create milestone dots
+  //  milestone dots
   milestoneDotsContainer.innerHTML = '';
   labelValues.forEach((value, i) => {
     const dot = document.createElement('div');
@@ -546,7 +546,7 @@
     milestoneDotsContainer.appendChild(dot);
   });
 
-  // Create labels
+
   rangeLabelsContainer.innerHTML = '';
   labelValues.forEach((value, i) => {
     const span = document.createElement('span');
@@ -556,7 +556,7 @@
     const percent = (index / (milestones.length - 1)) * 100;
     span.style.left = `${percent}%`;
    
-    // Perfect positioning for first and last labels
+    
     if (i === 0) {
       span.style.transform = 'translateX(0%)';
     } else if (i === labelValues.length - 1) {
@@ -586,11 +586,11 @@
   }
 
   function updateActiveDot(currentVolume) {
-    // Remove active class from all dots
+    
     const allDots = milestoneDotsContainer.querySelectorAll('.milestone-dot');
     allDots.forEach(dot => dot.classList.remove('active'));
    
-    // Find and highlight the closest milestone dot
+    
     let closestDot = null;
     let closestDistance = Infinity;
    
@@ -610,7 +610,7 @@
 
   slider.addEventListener('input', update);
  
-  // Touch event handling for better mobile experience
+
   slider.addEventListener('touchstart', function() {
     this.classList.add('sliding');
   });
@@ -619,7 +619,7 @@
     this.classList.remove('sliding');
   });
 
-  // Initialize on load
+  
   update();
 </script>
 

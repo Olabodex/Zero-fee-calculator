@@ -278,14 +278,9 @@
       font-size: 11px;
     }
 
-    /* Shift $100k to align at the very start of the slider */
-    .range-labels span:nth-child(1) {
-      transform: translateX(-8%);
-    }
-
-    /* Shift $250k more to the right to align with dragger position */
+    /* Hide only $250k on mobile to prevent crowding */
     .range-labels span:nth-child(2) {
-      transform: translateX(0%);
+      display: none;
     }
 
     .card {

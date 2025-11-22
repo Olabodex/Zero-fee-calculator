@@ -278,6 +278,11 @@
       font-size: 11px;
     }
 
+    /* Adjust $250k positioning on mobile for better spacing */
+    .range-labels span:nth-child(2) {
+      transform: translateX(-30%);
+    }
+
     .card {
       padding: 36px 28px;
       border-radius: 20px;
@@ -402,7 +407,6 @@
       span.style.transform = 'translateX(-100%)';
     } else {
       span.style.transform = 'translateX(-50%)';
-
     }
    
     rangeLabelsContainer.appendChild(span);

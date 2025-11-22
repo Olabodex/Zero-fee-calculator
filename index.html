@@ -6,303 +6,419 @@
 <title>Zero Fee Processing Calculator</title>
 
 <style>
+  * {
+    box-sizing: border-box;
+  }
+
   body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: #f5f7fb;
     color: #1d1d44;
-    margin: 0; padding: 0;
+    margin: 0;
+    padding: 0;
   }
 
-  .container {
+  .calculator-section {
     max-width: 1300px;
-    margin: 60px auto;
-    display: flex;
-    gap: 40px;
+    margin: 80px auto;
     padding: 0 40px;
-    align-items: flex-start;
   }
 
-  .left-section {
-    flex: 1;
-    padding-right: 40px;
+  .section-header {
+    text-align: center;
+    margin-bottom: 60px;
   }
 
-  h1 {
-    font-size: 56px;
-    margin-bottom: 20px;
+  .section-header h1 {
+    font-size: 52px;
+    font-weight: 700;
+    margin: 0 0 15px 0;
+    color: #1d1d44;
   }
 
-  .subtitle {
+  .section-header p {
     font-size: 20px;
     color: #5a5a7a;
-    margin-bottom: 35px;
+    margin: 0;
   }
 
-  .label {
-    font-weight: 700;
-    font-size: 26px;
-    margin-bottom: 12px;
+  .calculator-container {
+    display: flex;
+    gap: 50px;
+    align-items: center;
+  }
+
+  .calculator-left {
+    flex: 1;
+    padding-right: 20px;
+  }
+
+  .input-group {
+    margin-bottom: 15px;
+  }
+
+  .input-label {
+    font-weight: 600;
+    font-size: 18px;
+    color: #1d1d44;
+    margin-bottom: 20px;
+    display: block;
   }
 
   .value-display {
-    font-size: 40px;
+    font-size: 48px;
     font-weight: 700;
-    color: #3ecf8e;
-    margin-bottom: 25px;
+    color: #28a745;
+    margin-bottom: 30px;
+    line-height: 1;
+  }
+
+  .slider-container {
+    position: relative;
+    padding-bottom: 40px;
   }
 
   input[type="range"] {
     width: 100%;
-    height: 12px;
-    border-radius: 5px;
-    background: #d3d3d3;
+    height: 8px;
+    border-radius: 10px;
+    background: #e0e0e0;
     outline: none;
     -webkit-appearance: none;
-    position: relative;
-    z-index: 2;
+    appearance: none;
+    cursor: pointer;
   }
 
   input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 34px;
-    height: 34px;
+    appearance: none;
+    width: 28px;
+    height: 28px;
     background: #28a745;
     border-radius: 50%;
     cursor: pointer;
-    border: none;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    position: relative;
-    z-index: 3;
+    border: 4px solid white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: transform 0.15s ease;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+    background: #28a745;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 4px solid white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: transform 0.15s ease;
+  }
+
+  input[type="range"]::-moz-range-thumb:hover {
+    transform: scale(1.1);
   }
 
   .range-labels {
-    position: relative;
-    width: 100%;
-    height: 20px;
-    margin-top: 12px;
-  }
-
-  .range-labels span {
     position: absolute;
-    top: 0;
+    width: 100%;
+    top: 30px;
+    left: 0;
+  }
+
+  .range-label {
+    position: absolute;
     transform: translateX(-50%);
-    font-size: 14px;
-    color: #777;
-    white-space: nowrap;
+    font-size: 13px;
+    color: #888;
+    font-weight: 500;
   }
 
-  .note {
-    margin-top: 25px;
+  .calculator-note {
+    margin-top: 20px;
     font-size: 14px;
-    color: #777;
+    color: #888;
+    font-style: italic;
   }
 
-  .card {
-    flex: 0 0 450px;
-    background: linear-gradient(180deg, #28a745, #1e7e34);
-    border-radius: 35px;
-    padding: 50px 40px;
+  .savings-card {
+    flex: 0 0 480px;
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    border-radius: 30px;
+    padding: 55px 45px;
     color: white;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    box-shadow: 0 15px 50px rgba(40, 167, 69, 0.3);
+    position: relative;
+    overflow: hidden;
   }
 
-  .card h2 {
-    font-size: 70px;
+  .savings-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .savings-amount {
+    position: relative;
+    z-index: 1;
+  }
+
+  .savings-amount h2 {
+    font-size: 72px;
+    font-weight: 700;
     margin: 0;
     display: inline-block;
     line-height: 1;
   }
 
-  .card small {
-    font-size: 22px;
-    margin-left: 12px;
+  .savings-amount small {
+    font-size: 24px;
+    font-weight: 600;
+    margin-left: 8px;
     vertical-align: bottom;
-    white-space: nowrap;
   }
 
-  .desc {
+  .savings-description {
     margin-top: 25px;
     font-weight: 600;
-    font-size: 22px;
+    font-size: 24px;
+    line-height: 1.3;
+    position: relative;
+    z-index: 1;
   }
 
-  .subtext {
-    margin-top: 18px;
-    font-size: 18px;
+  .savings-subtext {
+    margin-top: 20px;
+    font-size: 17px;
     line-height: 1.5;
+    opacity: 0.95;
+    position: relative;
+    z-index: 1;
   }
 
-  .button {
-    margin-top: 40px;
-    background: #28a745;
-    padding: 18px 40px;
+  .cta-button {
+    margin-top: 35px;
+    background: white;
+    color: #28a745;
+    padding: 18px 45px;
     font-weight: 700;
-    font-size: 20px;
-    border-radius: 35px;
-    color: white;
+    font-size: 18px;
+    border-radius: 30px;
     border: none;
     cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 1;
   }
 
-  /* Responsive improvements */
-  @media (max-width: 768px) {
-    .container {
+  .cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  }
+
+  @media (max-width: 1024px) {
+    .calculator-container {
       flex-direction: column;
-      padding: 20px;
       gap: 40px;
     }
 
-    .value-display {
-      font-size: 28px;
-      margin-bottom: 30px;
-    }
-
-    .range-labels span {
-      font-size: 12px;
-      white-space: nowrap;
-      padding: 0 6px;
-      box-sizing: content-box;
-    }
-
-    /* Extra spacing between $100,000 and $250,000 */
-    .range-labels span:nth-child(1) {
-      transform: translateX(-70%);
-    }
-
-    .range-labels span:nth-child(2) {
-      transform: translateX(-30%);
-    }
-
-    .range-labels span:nth-child(3) {
-      transform: translateX(-40%);
-    }
-
-    .range-labels span:nth-child(4) {
-      transform: translateX(-35%);
-    }
-
-    .card {
+    .calculator-left {
       width: 100%;
-      max-width: 450px;
-      padding: 40px 30px;
-      margin: 0 auto;
-      box-sizing: border-box;
-      border-radius: 25px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      padding-right: 0;
     }
 
-    .card h2 {
-      font-size: 50px;
+    .savings-card {
+      width: 100%;
+      max-width: 500px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .calculator-section {
+      margin: 40px auto;
+      padding: 0 20px;
     }
 
-    .card small {
-      font-size: 18px;
-      margin-left: 8px;
+    .section-header h1 {
+      font-size: 36px;
     }
 
-    .desc {
-      font-size: 18px;
-      margin-top: 20px;
-    }
-
-    .subtext {
+    .section-header p {
       font-size: 16px;
-      margin-top: 16px;
     }
 
-    .button {
-      font-size: 18px;
-      padding: 14px 32px;
-      margin-top: 30px;
+    .value-display {
+      font-size: 36px;
+    }
+
+    .savings-card {
+      padding: 40px 30px;
+      border-radius: 20px;
+    }
+
+    .savings-amount h2 {
+      font-size: 56px;
+    }
+
+    .savings-amount small {
+      font-size: 20px;
+    }
+
+    .savings-description {
+      font-size: 20px;
+    }
+
+    .savings-subtext {
+      font-size: 15px;
+    }
+
+    .range-label {
+      font-size: 11px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .section-header h1 {
+      font-size: 28px;
+    }
+
+    .value-display {
+      font-size: 32px;
+    }
+
+    .savings-amount h2 {
+      font-size: 48px;
+    }
+
+    .cta-button {
+      width: 100%;
+      padding: 16px 35px;
     }
   }
 </style>
 </head>
 <body>
 
-<div class="container">
-
-  <div class="left-section">
-    <h1>Estimate Your Savings</h1>
-    <p class="subtitle">Use the calculator below to estimate your annual savings.</p>
-
-    <div class="label">Annual Credit Card Processing Volume</div>
-    <div class="value-display" id="volumeText">$250,000</div>
-
-    <input type="range" id="volume" min="0" step="1" />
-
-    <div class="range-labels" id="rangeLabels"></div>
-
-    <div class="note">*Calculation is based on annual credit card processing volume multiplied by 3%.</div>
+<div class="calculator-section">
+  <div class="section-header">
+    <h1>See How Much You Can Save</h1>
+    <p>Use the calculator below to determine your potential savings on an annual basis</p>
   </div>
 
-  <div class="card">
-    <h2 id="savings">$7,500</h2><small>/yr.</small>
-    <div class="desc">Annual Savings Estimate<br>With Zero Fee Processing</div>
-    <div class="subtext">Keep more of your money by eliminating processing fees.</div>
-    <button class="button">GET STARTED</button>
-  </div>
+  <div class="calculator-container">
+    <div class="calculator-left">
+      <div class="input-group">
+        <label class="input-label">Annual Credit Card Processing Volume</label>
+        <div class="value-display" id="volumeDisplay">$250,000</div>
+      </div>
 
+      <div class="slider-container">
+        <input type="range" id="volumeSlider" min="0" max="100" value="30" />
+        <div class="range-labels" id="rangeLabels"></div>
+      </div>
+
+      <p class="calculator-note">*Calculation is based on annual credit card processing volume multiplied by 3%</p>
+    </div>
+
+    <div class="savings-card">
+      <div class="savings-amount">
+        <h2 id="savingsAmount">$7,500</h2><small>/yr.</small>
+      </div>
+      <div class="savings-description">
+        Potential Annual Savings<br>with Zero Fee Processing
+      </div>
+      <div class="savings-subtext">
+        Start saving towards your company success with credit card processing fees off your list
+      </div>
+      <button class="cta-button" onclick="window.location.href='#get-started'">GET STARTED</button>
+    </div>
+  </div>
 </div>
 
 <script>
-  const slider = document.getElementById('volume');
-  const volumeText = document.getElementById('volumeText');
-  const savingsText = document.getElementById('savings');
+  const slider = document.getElementById('volumeSlider');
+  const volumeDisplay = document.getElementById('volumeDisplay');
+  const savingsAmount = document.getElementById('savingsAmount');
   const rangeLabelsContainer = document.getElementById('rangeLabels');
 
-  // Build milestones array with exact 1,000,000 included
+  // Create milestone array for smooth scaling
   const milestones = [];
-
-  for(let v=100000; v <= 500000; v += 5000) milestones.push(v);
-  for(let v=505000; v < 1000000; v += 10000) milestones.push(v);
-  milestones.push(1000000);  // explicitly add 1,000,000
-  for(let v=1050000; v <= 5000000; v += 50000) milestones.push(v);
-
-  slider.max = milestones.length - 1;
-  slider.value = milestones.findIndex(v => v === 250000);
-
-  function formatMoney(num) {
-    return num.toLocaleString("en-US");
+ 
+  // $100k to $500k in $5k increments
+  for (let v = 100000; v <= 500000; v += 5000) {
+    milestones.push(v);
+  }
+ 
+  // $500k to $1M in $10k increments
+  for (let v = 510000; v < 1000000; v += 10000) {
+    milestones.push(v);
+  }
+  milestones.push(1000000);
+ 
+  // $1M to $5M in $50k increments
+  for (let v = 1050000; v <= 5000000; v += 50000) {
+    milestones.push(v);
   }
 
-  // Milestone labels to show below the slider with full comma format
+  // Update slider max to match milestones array
+  slider.max = milestones.length - 1;
+ 
+  // Set initial value to $250k
+  const initialIndex = milestones.findIndex(v => v === 250000);
+  slider.value = initialIndex;
+
+  // Format number with commas
+  function formatCurrency(num) {
+    return num.toLocaleString('en-US');
+  }
+
+  // Label positions
   const labelValues = [100000, 250000, 500000, 1000000, 5000000];
 
-  // Add labels positioned accurately on slider track
-  rangeLabelsContainer.innerHTML = ''; // clear old
-
+  // Create range labels
   labelValues.forEach(value => {
-    const span = document.createElement('span');
-    span.textContent = `$${formatMoney(value)}`; // full number format with commas
+    const label = document.createElement('div');
+    label.className = 'range-label';
+    label.textContent = `$${formatCurrency(value)}`;
+   
     const index = milestones.findIndex(v => v === value);
-    if (index === -1) return; // skip if value missing (shouldn't)
-    const percent = (index / (milestones.length - 1)) * 100;
-    span.style.left = `${percent}%`;
-    rangeLabelsContainer.appendChild(span);
+    if (index >= 0) {
+      const percent = (index / (milestones.length - 1)) * 100;
+      label.style.left = `${percent}%`;
+      rangeLabelsContainer.appendChild(label);
+    }
   });
 
-  function update() {
-    const idx = Number(slider.value);
-    const volume = milestones[idx];
-    volumeText.textContent = "$" + formatMoney(volume);
-
+  // Update display
+  function updateCalculator() {
+    const index = parseInt(slider.value);
+    const volume = milestones[index];
+   
+    // Update volume display
+    volumeDisplay.textContent = `$${formatCurrency(volume)}`;
+   
+    // Calculate savings (3% of volume)
     const savings = Math.round(volume * 0.03);
-    savingsText.textContent = "$" + formatMoney(savings);
-
-    updateSliderFill(idx);
+    savingsAmount.textContent = `$${formatCurrency(savings)}`;
+   
+    // Update slider fill
+    const percent = (index / (milestones.length - 1)) * 100;
+    slider.style.background = `linear-gradient(to right, #28a745 0%, #28a745 ${percent}%, #e0e0e0 ${percent}%, #e0e0e0 100%)`;
   }
 
-  function updateSliderFill(idx) {
-    const percent = (idx / (milestones.length - 1)) * 100;
-    slider.style.background = `linear-gradient(to right, #3ecf8e 0%, #28a745 ${percent}%, #d3d3d3 ${percent}%)`;
-  }
+  // Event listeners
+  slider.addEventListener('input', updateCalculator);
 
-  slider.addEventListener('input', update);
-
-  document.addEventListener("DOMContentLoaded", () => {
-    update();
-  });
+  // Initialize on load
+  updateCalculator();
 </script>
 
 </body>

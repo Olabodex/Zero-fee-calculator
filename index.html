@@ -174,29 +174,57 @@
     font-style: italic;
   }
 
-  .card {
-    flex: 0 0 420px;
+  .card-wrapper {
+    flex: 0 0 520px;
+    position: relative;
+  }
+
+  .card-layer {
+    position: absolute;
     background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
     border-radius: 24px;
-    padding: 48px 40px;
+    opacity: 0.12;
+  }
+
+  .card-layer:nth-child(1) {
+    top: 10px;
+    left: 0px;
+    right: -12px;
+    bottom: -10px;
+  }
+
+  .card-layer:nth-child(2) {
+    top: 20px;
+    left: 0px;
+    right: -24px;
+    bottom: -20px;
+  }
+
+  .card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border-radius: 24px;
+    padding: 60px 50px;
     color: white;
-    box-shadow: 0 20px 60px rgba(40, 167, 69, 0.25);
+    box-shadow: 0 25px 70px rgba(40, 167, 69, 0.3);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
   .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 24px 70px rgba(40, 167, 69, 0.3);
+    transform: translateY(-6px);
+    box-shadow: 0 30px 80px rgba(40, 167, 69, 0.35);
   }
 
   .card-amount {
     display: flex;
     align-items: baseline;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
   }
 
   .card h2 {
-    font-size: 64px;
+    font-size: 76px;
     font-weight: 800;
     margin: 0;
     line-height: 1;
@@ -204,33 +232,33 @@
   }
 
   .card small {
-    font-size: 20px;
-    margin-left: 8px;
+    font-size: 26px;
+    margin-left: 10px;
     font-weight: 600;
     opacity: 0.9;
   }
 
   .desc {
-    margin-top: 20px;
+    margin-top: 24px;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 23px;
     line-height: 1.4;
     opacity: 0.95;
   }
 
   .subtext {
-    margin-top: 16px;
-    font-size: 16px;
+    margin-top: 18px;
+    font-size: 18px;
     line-height: 1.6;
     opacity: 0.9;
   }
 
   .button {
-    margin-top: 32px;
+    margin-top: 36px;
     background: white;
-    padding: 16px 36px;
+    padding: 18px 40px;
     font-weight: 700;
-    font-size: 16px;
+    font-size: 17px;
     border-radius: 50px;
     color: #28a745;
     border: none;
@@ -250,7 +278,7 @@
     transform: translateY(0);
   }
 
-  /* Responsive */
+  /* Responsive improvements */
   @media (max-width: 992px) {
     .container {
       flex-direction: column;
@@ -262,10 +290,11 @@
       width: 100%;
     }
 
-    .card {
+    .card-wrapper {
       width: 100%;
-      max-width: 500px;
+      max-width: 560px;
       flex: none;
+      margin: 0 auto;
     }
   }
 
@@ -317,45 +346,63 @@
       display: none;
     }
 
-    /* Hide $250k dot on mobile  */
+    /* Hide $250k dot on mobile as well */
     .milestone-dot:nth-child(2) {
       display: none;
     }
 
-    
+    /* Make dots slightly larger and more tappable on mobile */
     .milestone-dot {
       width: 14px;
       height: 14px;
       border: 2px solid #d3d3d3;
     }
 
+    .card-wrapper {
+      max-width: 100%;
+    }
+
+    .card-layer:nth-child(1) {
+      top: 8px;
+      left: 0px;
+      right: -10px;
+      bottom: -8px;
+    }
+
+    .card-layer:nth-child(2) {
+      top: 16px;
+      left: 0px;
+      right: -20px;
+      bottom: -16px;
+    }
+
     .card {
-      padding: 36px 28px;
+      padding: 46px 36px;
       border-radius: 20px;
     }
 
     .card h2 {
-      font-size: 52px;
+      font-size: 62px;
     }
 
     .card small {
-      font-size: 18px;
+      font-size: 22px;
     }
 
     .desc {
-      font-size: 18px;
-      margin-top: 16px;
+      font-size: 20px;
+      margin-top: 20px;
     }
 
     .subtext {
-      font-size: 15px;
-      margin-top: 14px;
+      font-size: 17px;
+      margin-top: 16px;
     }
 
     .button {
-      font-size: 14px;
-      padding: 14px 32px;
-      margin-top: 28px;
+      font-size: 16px;
+      padding: 16px 36px;
+      margin-top: 32px;
       width: 100%;
     }
   }
@@ -369,8 +416,43 @@
       font-size: 32px;
     }
 
+    .card-layer:nth-child(1) {
+      top: 6px;
+      left: 0px;
+      right: -8px;
+      bottom: -6px;
+    }
+
+    .card-layer:nth-child(2) {
+      top: 12px;
+      left: 0px;
+      right: -16px;
+      bottom: -12px;
+    }
+
+    .card {
+      padding: 40px 30px;
+    }
+
     .card h2 {
-      font-size: 44px;
+      font-size: 52px;
+    }
+
+    .card small {
+      font-size: 20px;
+    }
+
+    .desc {
+      font-size: 18px;
+    }
+
+    .subtext {
+      font-size: 16px;
+    }
+
+    .button {
+      font-size: 15px;
+      padding: 14px 32px;
     }
   }
 </style>
@@ -395,13 +477,17 @@
     <div class="note">*Calculation is based on annual credit card processing volume multiplied by 3%.</div>
   </div>
 
-  <div class="card">
-    <div class="card-amount">
-      <h2 id="savings">$15,000</h2><small>/yr.</small>
+  <div class="card-wrapper">
+    <div class="card-layer"></div>
+    <div class="card-layer"></div>
+    <div class="card">
+      <div class="card-amount">
+        <h2 id="savings">$15,000</h2><small>/yr.</small>
+      </div>
+      <div class="desc">Annual Savings Estimate<br>With Zero Fee Processing</div>
+      <div class="subtext">Keep more of your money by eliminating processing fees.</div>
+      <button class="button">Get Started</button>
     </div>
-    <div class="desc">Annual Savings Estimate<br>With Zero Fee Pro</div>
-    <div class="subtext">Keep more of your money by eliminating processing fees.</div>
-    <button class="button">Get Started</button>
   </div>
 
 </div>
@@ -413,7 +499,7 @@
   const rangeLabelsContainer = document.getElementById('rangeLabels');
   const milestoneDotsContainer = document.getElementById('milestoneDots');
 
-  // milestones array
+  // Build milestones array
   const milestones = [];
   for(let v = 100000; v <= 500000; v += 5000) milestones.push(v);
   for(let v = 505000; v < 1000000; v += 10000) milestones.push(v);
@@ -439,7 +525,7 @@
   // Milestone labels
   const labelValues = [100000, 250000, 500000, 1000000, 5000000];
 
-  //  milestone dots
+  // Create milestone dots
   milestoneDotsContainer.innerHTML = '';
   labelValues.forEach((value, i) => {
     const dot = document.createElement('div');
@@ -470,7 +556,7 @@
     const percent = (index / (milestones.length - 1)) * 100;
     span.style.left = `${percent}%`;
    
-    
+    // Perfect positioning for first and last labels
     if (i === 0) {
       span.style.transform = 'translateX(0%)';
     } else if (i === labelValues.length - 1) {
@@ -500,11 +586,11 @@
   }
 
   function updateActiveDot(currentVolume) {
-    
+    // Remove active class from all dots
     const allDots = milestoneDotsContainer.querySelectorAll('.milestone-dot');
     allDots.forEach(dot => dot.classList.remove('active'));
    
-    
+    // Find and highlight the closest milestone dot
     let closestDot = null;
     let closestDistance = Infinity;
    
@@ -524,7 +610,7 @@
 
   slider.addEventListener('input', update);
  
-  
+  // Touch event handling for better mobile experience
   slider.addEventListener('touchstart', function() {
     this.classList.add('sliding');
   });
@@ -533,7 +619,7 @@
     this.classList.remove('sliding');
   });
 
- 
+  // Initialize on load
   update();
 </script>
 
